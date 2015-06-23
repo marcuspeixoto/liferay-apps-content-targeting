@@ -24,8 +24,7 @@
 		hourValue=startTimeHour
 		minuteParam="startTimeMinute"
 		minuteValue=startTimeMinute
-		name="startTime"
-	/>
+		name="startTime" />
 </@>
 
 <@aui["fieldset"] cssClass="time-selector" label="end-time">
@@ -40,53 +39,54 @@
 	/>
 </@>
 
-<script>
+<@aui["script"]>
 	var A = new AUI();
 
 	A.all('input[name*="Time"][type="text"]').each(
-			function(timeInput) {
-				timeInput.on('blur',
-					function() {
+        function(timeInput) {
+            timeInput.on(
+                'blur',
+                function() {
 
-						var timeParts = new Array();
+                    var timeParts = [];
 
-						A.all('input[name*="Time"][type="hidden"]').each(
-								function(input) {
-									var partNames = input.attr("name").split("_");
-									var partName = partNames[partNames.length-1];
+                    A.all('input[name*="Time"][type="hidden"]').each(
+                        function(input) {
+							var partArray = input.attr('name').split('_');
+							var partName = partArray[partArray.length - 1];
 
-									timeParts[partName] = input.val();
-								}
-						);
-
-						var correctTime = true;
-
-						correctTime = (correctTime &&
-							Number(timeParts['endTimeAmPm'])>=Number(timeParts['startTimeAmPm']));
-						correctTime = (correctTime &&
-							Number(timeParts['endTimeHour'])>=Number(timeParts['startTimeHour']));
-						correctTime = (correctTime &&
-							((Number(timeParts['endTimeHour'])>Number(timeParts['startTimeHour'])) ||
-							(Number(timeParts['endTimeMinute'])>=Number(timeParts['startTimeMinute']))));
-
-						if (!correctTime) {
-							A.one('#<@portlet["namespace"] />incorrectTimeMessage').show();
-						} else {
-							A.one('#<@portlet["namespace"] />incorrectTimeMessage').hide();
+							timeParts[partName] = input.val();
 						}
-					}
-				);
-			}
-	);
+					);
 
-</script>
+					var correctTime = true;
+
+					correctTime = correctTime &&
+						Number(timeParts.endTimeAmPm) >= Number(timeParts.startTimeAmPm);
+					correctTime = correctTime &&
+						Number(timeParts.endTimeHour) >= Number(timeParts.startTimeHour);
+					correctTime = correctTime &&
+						(Number(timeParts.endTimeHour) > Number(timeParts.startTimeHour) ||
+						Number(timeParts.endTimeMinute) >= Number(timeParts.startTimeMinute));
+
+                    if (!correctTime) {
+                        A.one('#<@portlet["namespace"] />incorrectTimeMessage').show();
+                    }
+                    else {
+                        A.one('#<@portlet["namespace"] />incorrectTimeMessage').hide();
+                    }
+
+                }
+            );
+        }
+	);
+</@>
 
 <style>
-	 .time-selector legend {
-		border: none;
-		font-weight: bold;
-		font-size: 15px;
+	.time-selector legend {
+		border-width: 0;
+		font-weight: bold; font-size: 15px;
 		line-height: 30px;
 		margin-bottom: 0;
-	 }
+	}
 </style>
