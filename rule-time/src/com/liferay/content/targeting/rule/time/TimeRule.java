@@ -124,6 +124,19 @@ public class TimeRule extends BaseRule {
 			values.get("startTimeMinute"));
 		int startTimeAmPm = GetterUtil.getInteger(values.get("startTimeAmPm"));
 
+		boolean correctTime = true;
+
+		correctTime = correctTime && endTimeAmPm >= startTimeAmPm;
+		correctTime = correctTime && endTimeHour >= startTimeHour;
+		correctTime = correctTime &&
+			((endTimeHour >= startTimeHour) ||
+				(endTimeMinute >= startTimeMinute));
+
+		if (!correctTime) {
+			throw new IllegalArgumentException(
+				"start-time-later-than-end-time");
+		}
+
 		JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
 
 		jsonObj.put("endTimeHour", endTimeHour);
